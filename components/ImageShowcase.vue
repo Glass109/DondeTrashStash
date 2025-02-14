@@ -8,7 +8,7 @@ const props = defineProps<Picture>()
 const emit = defineEmits(["delete", "edit"])
 const {toast} = useToast()
 const onError = () => {
-  toast({title: "Error al cargar imagen",description: "Se eliminará de la galería", variant: "destructive"})
+  toast({title: "Error al cargar imagen, eliminando...",description: `URL Inválido: ${props.url}`, variant: "destructive"})
   emit("delete")
 }
 
@@ -27,7 +27,7 @@ const cardTransform = computed(() => {
       id="maindiv"
       ref="target"
       class="relative shadow bg-gradient-to-br from-gray-100 to-gray-400 p-1 flex-col text-white rounded-2xl group overflow-clip hover:scale-105 hover:z-50  duration-500 ease-in-out">
-    <img @error="onError" :src="props.url" class="rounded-2xl w-full group-hover:blur-sm  duration-700"/>
+    <img @error="onError" :src="props.url" class="size-[200px] lg:size-[400px] object-cover rounded-2xl w-full group-hover:blur-sm  duration-700"/>
     <p class="cursor-pointer hover:animate-pulse font-bold w-10/12 absolute opacity-0 group-hover:opacity-100 left-6 top-1/2 text-center text-lg  duration-700"
        @click="$emit('edit')">
       {{ props.description }}</p>
@@ -41,11 +41,7 @@ const cardTransform = computed(() => {
 </template>
 
 <style scoped>
-img {
-  height: 300px;
-  width: 300px;
-  object-fit: cover;
-}
+
 #maindiv{
   transform: v-bind(cardTransform);
   transition: transform 0.1s;

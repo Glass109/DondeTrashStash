@@ -3,43 +3,44 @@ import {ref} from 'vue';
 import type {Picture} from "~/lib/types";
 import autoAnimate from "@formkit/auto-animate";
 import {useToast} from "~/components/ui/toast";
-import {useMouseInElement} from "@vueuse/core";
-
+import {rand} from "@vueuse/core";
 
 const imageContainer = ref<HTMLElement>();
 const {toast} = useToast();
-
+const marqueeSpeed = ref<number>(50);
 const pictures = ref<Picture[]>([
   {
-    url: 'https://picsum.photos/id/11/400',
-    description: 'Bello paisaje bajo la niebla',
+    url: `https://picsum.photos/id/${rand(1, 1000)}/400`,
+    description: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit',
   }, {
-    url: 'https://picsum.photos/id/22/400',
-    description: 'Hombre caminando al trabajo',
+    url: `https://picsum.photos/id/${rand(1, 1000)}/400`,
+    description: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit',
   }, {
-    url: 'https://picsum.photos/id/33/400',
-    description: 'Rocío evaporandose en la mañana',
+    url: `https://picsum.photos/id/${rand(1, 1000)}/400`,
+    description: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit',
   }, {
-    url: 'https://picsum.photos/id/44/400',
-    description: 'Playa en blanco y negro',
+    url: `https://picsum.photos/id/${rand(1, 1000)}/400`,
+    description: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit',
   }, {
-    url: 'https://picsum.photos/id/55/400',
-    description: 'La vida siempre encuentra una manera',
+    url: `https://picsum.photos/id/${rand(1, 1000)}/400`,
+    description: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit',
   }, {
-    url: 'https://picsum.photos/id/66/400',
-    description: 'La tormenta se acerca',
+    url: `https://picsum.photos/id/${rand(1, 1000)}/400`,
+    description: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit',
   }, {
-    url: 'https://picsum.photos/id/77/400',
-    description: 'Tranquilidad del mar',
+    url: `https://picsum.photos/id/${rand(1, 1000)}/400`,
+    description: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit',
   }, {
-    url: 'https://picsum.photos/id/88/400',
-    description: 'Caos en la ciudad',
+    url: `https://picsum.photos/id/${rand(1, 1000)}/400`,
+    description: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit',
   },
 ]);
 
-
-function onDelete(index: number) : void {
-  pictures.value.splice(index, 1);
+function onDelete(url: string) : void {
+  const index = pictures.value.findIndex(picture => picture.url === url);
+  if (index !== -1) {
+    pictures.value.splice(index, 1);
+  }
 }
 
 function showAddPictureDialog() : void {
@@ -49,11 +50,13 @@ function showAddPictureDialog() : void {
   if (url && description) {
     pictures.value.unshift({url, description});
     toast({title: "Imagen agregada a la galería", description: "Debería mostrarse en unos momentos"})
-
   }
 }
 
-function showEditDescriptionDialog(index: number): void {
+function showEditDescriptionDialog(url: string): void {
+  const index = pictures.value.findIndex(picture => picture.url === url);
+  if (index === -1) return;
+
   var newDescription = prompt('Descripción nueva...')
   if (!newDescription) return
   if (newDescription?.length < 5) {
@@ -64,41 +67,94 @@ function showEditDescriptionDialog(index: number): void {
   toast({title: "Descripción actualizada", description: "La descripción de la imagen ha sido actualizada"})
 }
 
-onMounted(() => {
-  autoAnimate(<HTMLElement>imageContainer.value);
-});
-
 </script>
 
 <template>
   <Toaster/>
   <main>
-    <div class="flex justify-evenly items-center px-10 py-4 mb-8 border-b-2 border-teal-500 shadow bg-teal-50">
+    <div class="flex justify-evenly items-center px-10 py-4 mb-8 border-b-2 border-teal-500 shadow bg-teal-50/70">
       <span></span>
+      <select v-model="marqueeSpeed" class="w-[100px]">
+        <option value="20">Lento</option>
+        <option value="50">Normal</option>
+        <option value="100">Rápido</option>
+      </select>
       <h1 class="text-5xl text-teal-600">Galería</h1>
       <Button @click="showAddPictureDialog" class="bg-teal-100 text-teal-600" size="icon">
         <Icon name="lucide:image-up" size="2em"></Icon>
       </Button>
     </div>
-    <div ref="imageContainer" class="container mx-auto flex flex-wrap justify-evenly">
-      <ImageShowcase v-for="(picture, index) in pictures"
-                     :key="index"
+    <NuxtMarquee pause-on-hover :auto-fill="true" :speed="marqueeSpeed">
+      <ImageShowcase v-for="(picture) in pictures.slice(pictures.length/2)"
+                     class="mr-4"
+                     :key="picture.url"
                      :description="picture.description"
                      :url="picture.url"
-                     @delete="onDelete(index)"
-                     @edit="showEditDescriptionDialog(index)"
+                     @delete="onDelete(picture.url)"
+                     @edit="showEditDescriptionDialog(picture.url)"
       />
-    </div>
+    </NuxtMarquee>
+    <br>
+    <NuxtMarquee pause-on-hover :auto-fill="true" direction="right" :speed="marqueeSpeed">
+      <ImageShowcase v-for="(picture) in pictures.slice(0,pictures.length/2)"
+                     class="mr-4"
+                     :key="picture.url"
+                     :description="picture.description"
+                     :url="picture.url"
+                     @delete="onDelete(picture.url)"
+                     @edit="showEditDescriptionDialog(picture.url)"
+      />
+    </NuxtMarquee>
   </main>
-
 </template>
 
 <style scoped>
+@-webkit-keyframes bg-scrolling-reverse {
+  100% {
+    background-position: 50px 50px;
+  }
+}
+@-moz-keyframes bg-scrolling-reverse {
+  100% {
+    background-position: 50px 50px;
+  }
+}
+@-o-keyframes bg-scrolling-reverse {
+  100% {
+    background-position: 50px 50px;
+  }
+}
+@keyframes bg-scrolling-reverse {
+  100% {
+    background-position: 50px 50px;
+  }
+}
+@-webkit-keyframes bg-scrolling {
+  0% {
+    background-position: 50px 50px;
+  }
+}
+@-moz-keyframes bg-scrolling {
+  0% {
+    background-position: 50px 50px;
+  }
+}
+@-o-keyframes bg-scrolling {
+  0% {
+    background-position: 50px 50px;
+  }
+}
+@keyframes bg-scrolling {
+  0% {
+    background-position: 50px 50px;
+  }
+}
+/* Main styles */
 main {
-  min-height: 100vh;
-  background-color: #FFFFFF;
-  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='100%25'%3E%3Cdefs%3E%3ClinearGradient id='a' gradientUnits='userSpaceOnUse' x1='0' x2='0' y1='0' y2='100%25' gradientTransform='rotate(240)'%3E%3Cstop offset='0' stop-color='%23FFFFFF'/%3E%3Cstop offset='1' stop-color='%234FE'/%3E%3C/linearGradient%3E%3Cpattern patternUnits='userSpaceOnUse' id='b' width='540' height='450' x='0' y='0' viewBox='0 0 1080 900'%3E%3Cg fill-opacity='0.1'%3E%3Cpolygon fill='%23444' points='90 150 0 300 180 300'/%3E%3Cpolygon points='90 150 180 0 0 0'/%3E%3Cpolygon fill='%23AAA' points='270 150 360 0 180 0'/%3E%3Cpolygon fill='%23DDD' points='450 150 360 300 540 300'/%3E%3Cpolygon fill='%23999' points='450 150 540 0 360 0'/%3E%3Cpolygon points='630 150 540 300 720 300'/%3E%3Cpolygon fill='%23DDD' points='630 150 720 0 540 0'/%3E%3Cpolygon fill='%23444' points='810 150 720 300 900 300'/%3E%3Cpolygon fill='%23FFF' points='810 150 900 0 720 0'/%3E%3Cpolygon fill='%23DDD' points='990 150 900 300 1080 300'/%3E%3Cpolygon fill='%23444' points='990 150 1080 0 900 0'/%3E%3Cpolygon fill='%23DDD' points='90 450 0 600 180 600'/%3E%3Cpolygon points='90 450 180 300 0 300'/%3E%3Cpolygon fill='%23666' points='270 450 180 600 360 600'/%3E%3Cpolygon fill='%23AAA' points='270 450 360 300 180 300'/%3E%3Cpolygon fill='%23DDD' points='450 450 360 600 540 600'/%3E%3Cpolygon fill='%23999' points='450 450 540 300 360 300'/%3E%3Cpolygon fill='%23999' points='630 450 540 600 720 600'/%3E%3Cpolygon fill='%23FFF' points='630 450 720 300 540 300'/%3E%3Cpolygon points='810 450 720 600 900 600'/%3E%3Cpolygon fill='%23DDD' points='810 450 900 300 720 300'/%3E%3Cpolygon fill='%23AAA' points='990 450 900 600 1080 600'/%3E%3Cpolygon fill='%23444' points='990 450 1080 300 900 300'/%3E%3Cpolygon fill='%23222' points='90 750 0 900 180 900'/%3E%3Cpolygon points='270 750 180 900 360 900'/%3E%3Cpolygon fill='%23DDD' points='270 750 360 600 180 600'/%3E%3Cpolygon points='450 750 540 600 360 600'/%3E%3Cpolygon points='630 750 540 900 720 900'/%3E%3Cpolygon fill='%23444' points='630 750 720 600 540 600'/%3E%3Cpolygon fill='%23AAA' points='810 750 720 900 900 900'/%3E%3Cpolygon fill='%23666' points='810 750 900 600 720 600'/%3E%3Cpolygon fill='%23999' points='990 750 900 900 1080 900'/%3E%3Cpolygon fill='%23999' points='180 0 90 150 270 150'/%3E%3Cpolygon fill='%23444' points='360 0 270 150 450 150'/%3E%3Cpolygon fill='%23FFF' points='540 0 450 150 630 150'/%3E%3Cpolygon points='900 0 810 150 990 150'/%3E%3Cpolygon fill='%23222' points='0 300 -90 450 90 450'/%3E%3Cpolygon fill='%23FFF' points='0 300 90 150 -90 150'/%3E%3Cpolygon fill='%23FFF' points='180 300 90 450 270 450'/%3E%3Cpolygon fill='%23666' points='180 300 270 150 90 150'/%3E%3Cpolygon fill='%23222' points='360 300 270 450 450 450'/%3E%3Cpolygon fill='%23FFF' points='360 300 450 150 270 150'/%3E%3Cpolygon fill='%23444' points='540 300 450 450 630 450'/%3E%3Cpolygon fill='%23222' points='540 300 630 150 450 150'/%3E%3Cpolygon fill='%23AAA' points='720 300 630 450 810 450'/%3E%3Cpolygon fill='%23666' points='720 300 810 150 630 150'/%3E%3Cpolygon fill='%23FFF' points='900 300 810 450 990 450'/%3E%3Cpolygon fill='%23999' points='900 300 990 150 810 150'/%3E%3Cpolygon points='0 600 -90 750 90 750'/%3E%3Cpolygon fill='%23666' points='0 600 90 450 -90 450'/%3E%3Cpolygon fill='%23AAA' points='180 600 90 750 270 750'/%3E%3Cpolygon fill='%23444' points='180 600 270 450 90 450'/%3E%3Cpolygon fill='%23444' points='360 600 270 750 450 750'/%3E%3Cpolygon fill='%23999' points='360 600 450 450 270 450'/%3E%3Cpolygon fill='%23666' points='540 600 630 450 450 450'/%3E%3Cpolygon fill='%23222' points='720 600 630 750 810 750'/%3E%3Cpolygon fill='%23FFF' points='900 600 810 750 990 750'/%3E%3Cpolygon fill='%23222' points='900 600 990 450 810 450'/%3E%3Cpolygon fill='%23DDD' points='0 900 90 750 -90 750'/%3E%3Cpolygon fill='%23444' points='180 900 270 750 90 750'/%3E%3Cpolygon fill='%23FFF' points='360 900 450 750 270 750'/%3E%3Cpolygon fill='%23AAA' points='540 900 630 750 450 750'/%3E%3Cpolygon fill='%23FFF' points='720 900 810 750 630 750'/%3E%3Cpolygon fill='%23222' points='900 900 990 750 810 750'/%3E%3Cpolygon fill='%23222' points='1080 300 990 450 1170 450'/%3E%3Cpolygon fill='%23FFF' points='1080 300 1170 150 990 150'/%3E%3Cpolygon points='1080 600 990 750 1170 750'/%3E%3Cpolygon fill='%23666' points='1080 600 1170 450 990 450'/%3E%3Cpolygon fill='%23DDD' points='1080 900 1170 750 990 750'/%3E%3C/g%3E%3C/pattern%3E%3C/defs%3E%3Crect x='0' y='0' fill='url(%23a)' width='100%25' height='100%25'/%3E%3Crect x='0' y='0' fill='url(%23b)' width='100%25' height='100%25'/%3E%3C/svg%3E");
-  background-attachment: fixed;
-  background-size: cover;
+  color: #999;
+  font: 400 16px/1.5 exo, ubuntu, "segoe ui", helvetica, arial, sans-serif;
+  text-align: center;
+  /* img size is 50x50 */
+  background: url("data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAADIAAAAyCAIAAACRXR/mAAAACXBIWXMAAAsTAAALEwEAmpwYAAAAIGNIUk0AAHolAACAgwAA+f8AAIDpAAB1MAAA6mAAADqYAAAXb5JfxUYAAABnSURBVHja7M5RDYAwDEXRDgmvEocnlrQS2SwUFST9uEfBGWs9c97nbGtDcquqiKhOImLs/UpuzVzWEi1atGjRokWLFi1atGjRokWLFi1atGjRokWLFi1af7Ukz8xWp8z8AAAA//8DAJ4LoEAAlL1nAAAAAElFTkSuQmCC") repeat 0 0;
 }
 </style>
