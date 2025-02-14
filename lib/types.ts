@@ -53,3 +53,8 @@ export type Book = {
     value: string;
   };
 };
+
+export type Picture = {
+  url: string;
+  description: string;
+};
