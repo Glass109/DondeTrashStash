@@ -2,40 +2,66 @@
 import {ref} from 'vue';
 import type {Picture} from "~/lib/types";
 import autoAnimate from "@formkit/auto-animate";
+import {useToast} from "~/components/ui/toast";
+import {useMouseInElement} from "@vueuse/core";
+
 
 const imageContainer = ref<HTMLElement>();
-
+const {toast} = useToast();
 
 const pictures = ref<Picture[]>([
   {
     url: 'https://picsum.photos/id/11/400',
-    description: 'Descripción random',
+    description: 'Bello paisaje bajo la niebla',
   }, {
     url: 'https://picsum.photos/id/22/400',
-    description: 'Otra descripción random',
+    description: 'Hombre caminando al trabajo',
   }, {
     url: 'https://picsum.photos/id/33/400',
-    description: 'Otra descripción random',
+    description: 'Rocío evaporandose en la mañana',
   }, {
     url: 'https://picsum.photos/id/44/400',
-    description: 'Otra descripción random',
+    description: 'Playa en blanco y negro',
   }, {
     url: 'https://picsum.photos/id/55/400',
-    description: 'Otra descripción random',
+    description: 'La vida siempre encuentra una manera',
   }, {
     url: 'https://picsum.photos/id/66/400',
-    description: 'Otra descripción random',
+    description: 'La tormenta se acerca',
   }, {
     url: 'https://picsum.photos/id/77/400',
-    description: 'Otra descripción random',
+    description: 'Tranquilidad del mar',
   }, {
     url: 'https://picsum.photos/id/88/400',
-    description: 'Otra descripción random',
+    description: 'Caos en la ciudad',
   },
 ]);
 
+
 function onDelete(index: number) : void {
   pictures.value.splice(index, 1);
+}
+
+function showAddPictureDialog() : void {
+  var url = prompt("URL de la imagen a agregar (No hay dinero para el backend)");
+  if(!url) return
+  var description = prompt("Descripción de la imagen");
+  if (url && description) {
+    pictures.value.unshift({url, description});
+    toast({title: "Imagen agregada a la galería", description: "Debería mostrarse en unos momentos"})
+
+  }
+}
+
+function showEditDescriptionDialog(index: number): void {
+  var newDescription = prompt('Descripción nueva...')
+  if (!newDescription) return
+  if (newDescription?.length < 5) {
+    alert("Mínimo 5 carácteres")
+    return
+  }
+  pictures.value[index].description = newDescription
+  toast({title: "Descripción actualizada", description: "La descripción de la imagen ha sido actualizada"})
 }
 
 onMounted(() => {
@@ -45,11 +71,12 @@ onMounted(() => {
 </script>
 
 <template>
+  <Toaster/>
   <main>
     <div class="flex justify-evenly items-center px-10 py-4 mb-8 border-b-2 border-teal-500 shadow bg-teal-50">
       <span></span>
       <h1 class="text-5xl text-teal-600">Galería</h1>
-      <Button class="bg-teal-100 text-teal-600" size="icon">
+      <Button @click="showAddPictureDialog" class="bg-teal-100 text-teal-600" size="icon">
         <Icon name="lucide:image-up" size="2em"></Icon>
       </Button>
     </div>
@@ -59,6 +86,7 @@ onMounted(() => {
                      :description="picture.description"
                      :url="picture.url"
                      @delete="onDelete(index)"
+                     @edit="showEditDescriptionDialog(index)"
       />
     </div>
   </main>
