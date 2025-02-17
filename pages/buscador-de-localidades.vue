@@ -32,7 +32,7 @@ watch(selected_municipio, async (newValue) => {
   <main class="bg-gradient-to-br from-green-100 via-purple-100 to-orange-100 min-h-screen grid place-items-center">
     <div class="container border shadow bg-background">
       <form class="flex flex-col gap-2 p-4">
-        <h1 class="font-bold text-4xl bg-gradient-to-br from-blue-500 to-purple-500 bg-clip-text text-transparent">
+        <h1 class="font-bold text-4xl galaxy bg-clip-text text-transparent">
           Consulta</h1>
         <small class="text-muted-foreground">PD: Si no funciona, probablemente me banearon de Github por andar abusando
           de su API</small>
@@ -58,7 +58,7 @@ watch(selected_municipio, async (newValue) => {
         </div>
         <Dialog>
           <DialogTrigger as-child>
-            <Button variant="default">Ver JSONs</Button>
+            <Button class="galaxy" variant="default">Ver JSONs</Button>
           </DialogTrigger>
           <DialogScrollContent>
             <DialogHeader>
@@ -92,5 +92,8 @@ watch(selected_municipio, async (newValue) => {
 <style scoped>
 select {
   flex-grow: 1;
+}
+.galaxy {
+  @apply bg-gradient-to-br from-blue-500 to-purple-500
 }
 </style>
