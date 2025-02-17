@@ -32,13 +32,14 @@ const getPostData = () => {
 
 <template>
   <main class="bg-gradient-to-br from-teal-50 to-teal-200 min-h-screen">
-    <div class="container mx-auto border shadow">
+    <div class="container mx-auto border shadow p-6">
       <h1>GET TEST</h1>
+      <br>
       <Button @click="getData">Obtener datos!</Button>
       <!-- Use <pre> tag to preserve formatting -->
       <pre>{{ data }}</pre>
     </div>
-    <div class="container mx-auto border shadow">
+    <div class="container mx-auto border shadow p-6">
       <h1>POST TEST</h1>
       <div class="flex flex-col gap-2">
       <label for="name">Nombre</label>
@@ -46,6 +47,7 @@ const getPostData = () => {
       <label for="post">Post</label>
       <input v-model="formData.post" name="ñost" type="text">
       </div>
+      <br>
       <Button @click="getPostData">Postear datos!</Button>
       <!-- Use <pre> tag to preserve formatting -->
       <pre>{{ postData }}</pre>
@@ -57,5 +59,8 @@ const getPostData = () => {
 <style scoped>
 input {
   @apply border border-black rounded
+}
+h1 {
+  @apply text-2xl font-bold
 }
 </style>

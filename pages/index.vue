@@ -7,6 +7,7 @@
     <NuxtLink to="/booksearch">Buscador de libros</NuxtLink>
     <NuxtLink to="/gallery">Galería interactiva</NuxtLink>
     <NuxtLink to="/post-testing">Prueba de POST</NuxtLink>
+    <NuxtLink to="/buscador-de-localidades">Buscador de localidades</NuxtLink>
   </div>
 </template>
 
