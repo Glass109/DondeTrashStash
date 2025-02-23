@@ -22,6 +22,7 @@
     "class-variance-authority": "^0.7.1",
     "clsx": "^2.1.1",
     "embla-carousel-vue": "^8.5.2",
+    "matter-js": "^0.20.0",
     "nuxt": "^3.15.3",
     "nuxt-marquee": "^1.0.4",
     "radix-vue": "^1.9.12",
@@ -37,6 +38,8 @@
     "zod": "^3.24.1"
   },
   "devDependencies": {
+    "@tresjs/nuxt": "^3.0.7",
+    "@types/matter-js": "^0.19.8",
     "typescript": "^5.7.3"
   }
 }

@@ -8,8 +8,12 @@ export default defineNuxtConfig({
     'shadcn-nuxt',
     '@nuxtjs/color-mode',
     '@nuxt/icon',
-    'nuxt-marquee'
+    'nuxt-marquee',
+    '@tresjs/nuxt'
   ],
+  tres: {
+    glsl: true,
+  },
   shadcn: {
     /**
      * Prefix for all the imported component
