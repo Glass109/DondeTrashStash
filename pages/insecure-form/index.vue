@@ -3,11 +3,14 @@ import {ref, onMounted} from 'vue';
 import Matter from 'matter-js';
 import {useElementBounding, useMediaQuery} from '@vueuse/core';
 import {useMatterWorld} from '~/composables/useMatterWorld';
+import {useToast} from "~/components/ui/toast";
 
 definePageMeta({
   title: 'Insecure Form',
   description: 'Insecure form page'
 });
+const {toast} = useToast();
+const isLoading = ref(false);
 const canvas = ref<HTMLElement>();
 const card = ref();
 const loggedUser = useCookie('user', {watch: true});
@@ -31,26 +34,32 @@ type User = {
 };
 
 const onLogin = async () => {
-  console.log('Login form submitted', loginFormData.value);
-  fetch('http://localhost:8080/users')
-      .then((res) => res.json())
-      .then((data) => {
-        console.log('Data fetched', data);
-        data.filter((user: User) => {
-          if (user.Username === loginFormData.value.username &&
-              user.Password === loginFormData.value.password) {
-            console.log('User found', user);
-            loggedUser.value = JSON.stringify(user);
-            navigateTo('/insecure-form/messages');
-          }
-        });
-      })
-      .catch((err) => console.error(err));
-};
+      isLoading.value = true;
+      console.log('Login form submitted', loginFormData.value);
+      fetch(useRuntimeConfig().public.BACKEND_URL + '/users')
+          .then((res) => res.json())
+          .then((data) => {
+            console.log('Data fetched', data);
+            const user = data.filter((user: User) => {
+              if (user.Username === loginFormData.value.username &&
+                  user.Password === loginFormData.value.password) {
+                console.log('User found', user);
+                loggedUser.value = JSON.stringify(user);
+                navigateTo('/insecure-form/messages');
+              }
+            });
+            if (!loggedUser.value) {
+              toast({title: "Error", description: "Usuario o contraseña incorrectos", variant: "destructive"});
+            }
+          })
+          .finally(() => isLoading.value = false)
+          .catch((err) => toast({title: "Error", description: "Usuario o contraseña incorrectos", variant: "destructive"}));
+    }
+;
 
 const onRegister = () => {
   console.log('Register form submitted', registerFormData.value);
-  fetch('http://localhost:8080/users/create', {
+  fetch(useRuntimeConfig().public.BACKEND_URL + '/users/create', {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json'
@@ -63,7 +72,7 @@ const onRegister = () => {
         navigateTo('/insecure-form?message=Usuario registrado correctamente');
         location.reload();
       })
-      .catch((err) => console.error(err));
+      .catch((err) => toast({title: "Error", description: "Error al registrar el usuario", variant: "destructive"}));
 };
 onMounted(() => {
   // Create a static body for your form card
@@ -97,7 +106,7 @@ onMounted(() => {
     }
   });
   let counter = 0;
-  const max_blocks = isMobile? 30 : 150;
+  const max_blocks = isMobile ? 30 : 150;
   // Add new blocks periodically
   const addBlockInterval = setInterval(() => {
     matterWorld.addBlock()
@@ -132,7 +141,7 @@ onMounted(() => {
             <Input v-model:model-value="loginFormData.username" type="text" id="username" name="username" required/>
             <Label for="password">Contraseña</Label>
             <Input v-model:model-value="loginFormData.password" type="password" id="password" name="password" required/>
-            <Button type="submit">Inciar sesión</Button>
+            <Button :disabled="isLoading" type="submit">Inciar sesión</Button>
           </form>
         </TabsContent>
         <TabsContent value="register">
@@ -144,7 +153,7 @@ onMounted(() => {
                    required/>
             <Label for="email">Correo Electrónico</Label>
             <Input v-model:model-value="registerFormData.Email" type="email" id="email" name="email" required/>
-            <Button type="submit" class="btn btn-primary">Registrarse</Button>
+            <Button :disabled="isLoading" type="submit" class="btn btn-primary">Registrarse</Button>
           </form>
         </TabsContent>
       </Tabs>

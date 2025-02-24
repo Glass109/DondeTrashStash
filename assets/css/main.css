@@ -1,5 +1,5 @@
 .mainpage{
-    @apply min-h-screen grid place-items-center
+    @apply min-h-screen grid place-items-center overflow-auto w-full
 }
 .gradientbackground {
     @apply bg-gradient-to-br from-green-100 via-purple-100 to-orange-100
