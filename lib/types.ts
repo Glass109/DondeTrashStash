@@ -58,3 +58,35 @@ export type Picture = {
   url: string;
   description: string;
 };
+
+export type Asignatura = {
+  ID?: number;
+  CreatedAt?: string;
+  UpdatedAt?: string;
+  DeletedAt?: string | null;
+  Nombre: string;
+  Familia: string;
+  Duracion: number;
+  Cuatrimestre: number;
+  Profesor: string;
+  Competencia: string;
+  ObjetivoGeneral: string;
+  Unidades: UnidadDeAprendizaje[] | null;
+};
+
+export type UnidadDeAprendizaje = {
+  ID?: number;
+  CreatedAt?: string;
+  UpdatedAt?: string;
+  DeletedAt?: string | null;
+  Nombre: string;
+  Competencia: string;
+  Semanas: number;
+  Producto: string;
+  TareaIntegradora: boolean;
+  Conocimiento: number;
+  Desempeño: number;
+  AsignaturaID: number;
+  Asignatura: Asignatura;
+};
+

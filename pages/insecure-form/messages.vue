@@ -40,13 +40,13 @@ onMounted(fetchMessages);
 </script>
 
 <template>
-<main class="mainpage gradientbackground">
+<main class="mainpage gradient-background">
   <div class="fixed top-2 right-2">
     <Button variant="destructive" @click="logout">Logout</Button>
     <Button @click="newMessage">Nuevo mensaje</Button>
   </div>
   <div v-if="messages.length > 0">
-    <h1 class="gradientbackground text-6xl text-transparent bg-clip-text">Messages</h1>
+    <h1 class="gradient-background text-6xl text-transparent bg-clip-text">Messages</h1>
     <div v-auto-animate class="flex gap-4 flex-wrap justify-center">
       <insecure-message v-for="post in messages" :post="post" />
     </div>

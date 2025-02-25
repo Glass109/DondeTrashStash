@@ -119,46 +119,50 @@ onMounted(() => {
 </script>
 
 <template>
-
-  <div ref="canvas" class="absolute inset-0 w-screen h-screen z-10"/>
-  <main class="mainpage gradientbackground">
-    <div ref="card" class=" z-20 p-4 bg-card rounded-xl text-card-foreground shadow-lg">
-      <h1 class="text-center font-extrabold">Bienvenido a la plataforma de Soluciones Inseguras & Co</h1>
-      <small class="block text-center text-muted-foreground text-sm">Desarrollado por la división de Entornos
-        Virtuales</small>
-      <div class="flex justify-center">
-        <img class="size-[120px]" src="https://media1.tenor.com/m/Np_76U9KyfoAAAAd/woo-yeah-oh-yeah.gif"
-             alt="Mono bailando">
+  <div>
+    <div ref="canvas" class="absolute inset-0 w-screen h-screen z-10"/>
+    <main class="mainpage gradient-background">
+      <div ref="card" class=" z-20 p-4 bg-card rounded-xl text-card-foreground shadow-lg">
+        <h1 class="text-center font-extrabold">Bienvenido a la plataforma de Soluciones Inseguras & Co</h1>
+        <small class="block text-center text-muted-foreground text-sm">Desarrollado por la división de Entornos
+          Virtuales</small>
+        <div class="flex justify-center">
+          <img class="size-[120px]" src="https://media1.tenor.com/m/Np_76U9KyfoAAAAd/woo-yeah-oh-yeah.gif"
+               alt="Mono bailando">
+        </div>
+        <Tabs orientation="vertical" v-model:model-value="tabsValue">
+          <TabsList class="md:w-full">
+            <TabsTrigger class="w-full" value="login">Iniciar sesión</TabsTrigger>
+            <TabsTrigger class="w-full" value="register">Registrarse</TabsTrigger>
+          </TabsList>
+          <TabsContent value="login">
+            <form @submit.prevent="onLogin" class="flex flex-col gap-2">
+              <Label for="username">Nombre de usuario</Label>
+              <Input v-model:model-value="loginFormData.username" type="text" id="username" name="username" required/>
+              <Label for="password">Contraseña</Label>
+              <Input v-model:model-value="loginFormData.password" type="password" id="password" name="password"
+                     required/>
+              <Button :disabled="isLoading" type="submit">Inciar sesión</Button>
+            </form>
+          </TabsContent>
+          <TabsContent value="register">
+            <form @submit.prevent="onRegister" class="flex flex-col gap-2">
+              <Label for="username">Nombre de usuario</Label>
+              <Input v-model:model-value="registerFormData.Username" type="text" id="username" name="username"
+                     required/>
+              <Label for="password">Contraseña</Label>
+              <Input v-model:model-value="registerFormData.Password" type="password" id="password" name="password"
+                     required/>
+              <Label for="email">Correo Electrónico</Label>
+              <Input v-model:model-value="registerFormData.Email" type="email" id="email" name="email" required/>
+              <Button :disabled="isLoading" type="submit" class="btn btn-primary">Registrarse</Button>
+            </form>
+          </TabsContent>
+        </Tabs>
       </div>
-      <Tabs orientation="vertical" v-model:model-value="tabsValue">
-        <TabsList class="md:w-full">
-          <TabsTrigger class="w-full" value="login">Iniciar sesión</TabsTrigger>
-          <TabsTrigger class="w-full" value="register">Registrarse</TabsTrigger>
-        </TabsList>
-        <TabsContent value="login">
-          <form @submit.prevent="onLogin" class="flex flex-col gap-2">
-            <Label for="username">Nombre de usuario</Label>
-            <Input v-model:model-value="loginFormData.username" type="text" id="username" name="username" required/>
-            <Label for="password">Contraseña</Label>
-            <Input v-model:model-value="loginFormData.password" type="password" id="password" name="password" required/>
-            <Button :disabled="isLoading" type="submit">Inciar sesión</Button>
-          </form>
-        </TabsContent>
-        <TabsContent value="register">
-          <form @submit.prevent="onRegister" class="flex flex-col gap-2">
-            <Label for="username">Nombre de usuario</Label>
-            <Input v-model:model-value="registerFormData.Username" type="text" id="username" name="username" required/>
-            <Label for="password">Contraseña</Label>
-            <Input v-model:model-value="registerFormData.Password" type="password" id="password" name="password"
-                   required/>
-            <Label for="email">Correo Electrónico</Label>
-            <Input v-model:model-value="registerFormData.Email" type="email" id="email" name="email" required/>
-            <Button :disabled="isLoading" type="submit" class="btn btn-primary">Registrarse</Button>
-          </form>
-        </TabsContent>
-      </Tabs>
-    </div>
-  </main>
+
+    </main>
+  </div>
 
 </template>
 

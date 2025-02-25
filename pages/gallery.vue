@@ -36,16 +36,16 @@ const pictures = ref<Picture[]>([
   },
 ]);
 
-function onDelete(url: string) : void {
+function onDelete(url: string): void {
   const index = pictures.value.findIndex(picture => picture.url === url);
   if (index !== -1) {
     pictures.value.splice(index, 1);
   }
 }
 
-function showAddPictureDialog() : void {
+function showAddPictureDialog(): void {
   var url = prompt("URL de la imagen a agregar (No hay dinero para el backend)");
-  if(!url) return
+  if (!url) return
   var description = prompt("Descripción de la imagen");
   if (url && description) {
     pictures.value.unshift({url, description});
@@ -70,42 +70,44 @@ function showEditDescriptionDialog(url: string): void {
 </script>
 
 <template>
-  <Toaster/>
-  <main>
-    <div class="flex justify-evenly items-center px-10 py-4 mb-8 border-b-2 border-teal-500 shadow bg-teal-50/70">
-      <span></span>
-      <select v-model="marqueeSpeed" class="w-[100px]">
-        <option value="20">Lento</option>
-        <option value="50">Normal</option>
-        <option value="100">Rápido</option>
-      </select>
-      <h1 class="text-5xl text-teal-600">Galería</h1>
-      <Button @click="showAddPictureDialog" class="bg-teal-100 text-teal-600" size="icon">
-        <Icon name="lucide:image-up" size="2em"></Icon>
-      </Button>
-    </div>
-    <NuxtMarquee pause-on-hover :auto-fill="true" :speed="marqueeSpeed">
-      <ImageShowcase v-for="(picture) in pictures.slice(pictures.length/2)"
-                     class="mr-4"
-                     :key="picture.url"
-                     :description="picture.description"
-                     :url="picture.url"
-                     @delete="onDelete(picture.url)"
-                     @edit="showEditDescriptionDialog(picture.url)"
-      />
-    </NuxtMarquee>
-    <br>
-    <NuxtMarquee pause-on-hover :auto-fill="true" direction="right" :speed="marqueeSpeed">
-      <ImageShowcase v-for="(picture) in pictures.slice(0,pictures.length/2)"
-                     class="mr-4"
-                     :key="picture.url"
-                     :description="picture.description"
-                     :url="picture.url"
-                     @delete="onDelete(picture.url)"
-                     @edit="showEditDescriptionDialog(picture.url)"
-      />
-    </NuxtMarquee>
-  </main>
+  <div>
+    <Toaster/>
+    <main>
+      <div class="flex justify-evenly items-center px-10 py-4 mb-8 border-b-2 border-teal-500 shadow bg-teal-50/70">
+        <span></span>
+        <select v-model="marqueeSpeed" class="w-[100px]">
+          <option value="20">Lento</option>
+          <option value="50">Normal</option>
+          <option value="100">Rápido</option>
+        </select>
+        <h1 class="text-5xl text-teal-600">Galería</h1>
+        <Button @click="showAddPictureDialog" class="bg-teal-100 text-teal-600" size="icon">
+          <Icon name="lucide:image-up" size="2em"></Icon>
+        </Button>
+      </div>
+      <NuxtMarquee pause-on-hover :auto-fill="true" :speed="marqueeSpeed">
+        <ImageShowcase v-for="(picture) in pictures.slice(pictures.length/2)"
+                       class="mr-4"
+                       :key="picture.url"
+                       :description="picture.description"
+                       :url="picture.url"
+                       @delete="onDelete(picture.url)"
+                       @edit="showEditDescriptionDialog(picture.url)"
+        />
+      </NuxtMarquee>
+      <br>
+      <NuxtMarquee pause-on-hover :auto-fill="true" direction="right" :speed="marqueeSpeed">
+        <ImageShowcase v-for="(picture) in pictures.slice(0,pictures.length/2)"
+                       class="mr-4"
+                       :key="picture.url"
+                       :description="picture.description"
+                       :url="picture.url"
+                       @delete="onDelete(picture.url)"
+                       @edit="showEditDescriptionDialog(picture.url)"
+        />
+      </NuxtMarquee>
+    </main>
+  </div>
 </template>
 
 <style scoped>
@@ -114,41 +116,49 @@ function showEditDescriptionDialog(url: string): void {
     background-position: 50px 50px;
   }
 }
+
 @-moz-keyframes bg-scrolling-reverse {
   100% {
     background-position: 50px 50px;
   }
 }
+
 @-o-keyframes bg-scrolling-reverse {
   100% {
     background-position: 50px 50px;
   }
 }
+
 @keyframes bg-scrolling-reverse {
   100% {
     background-position: 50px 50px;
   }
 }
+
 @-webkit-keyframes bg-scrolling {
   0% {
     background-position: 50px 50px;
   }
 }
+
 @-moz-keyframes bg-scrolling {
   0% {
     background-position: 50px 50px;
   }
 }
+
 @-o-keyframes bg-scrolling {
   0% {
     background-position: 50px 50px;
   }
 }
+
 @keyframes bg-scrolling {
   0% {
     background-position: 50px 50px;
   }
 }
+
 /* Main styles */
 main {
   color: #999;
