@@ -36,7 +36,7 @@ type User = {
 const onLogin = async () => {
       isLoading.value = true;
       console.log('Login form submitted', loginFormData.value);
-      fetch(useRuntimeConfig().public.BACKEND_URL + '/users')
+      fetch(useRuntimeConfig().public.BACKEND_URL + 'diegoapi/users')
           .then((res) => res.json())
           .then((data) => {
             console.log('Data fetched', data);
@@ -59,7 +59,7 @@ const onLogin = async () => {
 
 const onRegister = () => {
   console.log('Register form submitted', registerFormData.value);
-  fetch(useRuntimeConfig().public.BACKEND_URL + '/users/create', {
+  fetch(useRuntimeConfig().public.BACKEND_URL + 'diegoapi/users/create', {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json'

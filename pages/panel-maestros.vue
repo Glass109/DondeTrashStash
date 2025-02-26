@@ -11,17 +11,18 @@ const router = useRouter()
 const {toast} = useToast()
 const fetchData = async () => {
   console.log("Fetching asignaturas")
-  const response = await fetch('http://glass109.oops.wtf:8080/asignaturas?preload=true').catch(console.error)
+  const response = await fetch(useRuntimeConfig().public.BACKEND_URL + '/normaapi/asignaturas?preload=true').catch(console.error)
   if (!response) {
     toast({title: "Error", description: "Hubo un problema al cargar las asignaturas"})
     return
   }
-  fetchedAsignaturas.value = await response.json()
+  console.log('Response' + response)
+  fetchedAsignaturas.value = await response.json().catch(console.error)
 }
 provide('fetchData', fetchData)
 
 onMounted(() => {
-  fetchData()
+  fetchData().catch(console.error)
 })
 
 </script>

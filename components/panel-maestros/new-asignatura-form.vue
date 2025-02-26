@@ -18,7 +18,7 @@ const onSubmit = (event : SubmitEvent) => {
   data.Cuatrimestre = Number(data.Cuatrimestre) + 1
   // console.table(data)
   // return
-  fetch(useRuntimeConfig().public.BACKEND_URL + '/asignaturas/create', {
+  fetch(useRuntimeConfig().public.BACKEND_URL + 'normaapi/asignaturas/create', {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json'

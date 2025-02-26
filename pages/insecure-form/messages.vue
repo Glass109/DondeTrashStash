@@ -13,7 +13,7 @@ function logout () {
   navigateTo('/insecure-form');
 }
 const fetchMessages = async () => {
-  const response = await fetch(useRuntimeConfig().public.BACKEND_URL + '/posts');
+  const response = await fetch(useRuntimeConfig().public.BACKEND_URL + 'diegoapi/posts');
   console.table(response);
   messages.value = await response.json();
 };
@@ -26,13 +26,13 @@ const newMessage = () => {
     console.log('No se puede crear el mensaje, faltan datos');
     return;
   }
-  fetch(useRuntimeConfig().public.BACKEND_URL + '/posts/create', {
+  fetch(useRuntimeConfig().public.BACKEND_URL + 'diegoapi/posts/create', {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json'
     },
     body: JSON.stringify({Title, Content, UserId})
-  }).then(fetchMessages);
+  }).then(fetchMessages).catch(console.error);
 };
 
 onMounted(fetchMessages);

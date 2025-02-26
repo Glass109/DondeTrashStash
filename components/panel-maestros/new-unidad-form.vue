@@ -17,7 +17,7 @@ const onCrearUnidad = (event: SubmitEvent) => {
   data.AsignaturaID = props.asignaturaId
   // console.log(data)
   // return
-  fetch(useRuntimeConfig().public.BACKEND_URL + '/unidades/create', {
+  fetch(useRuntimeConfig().public.BACKEND_URL + 'normaapi/unidades/create', {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json'
