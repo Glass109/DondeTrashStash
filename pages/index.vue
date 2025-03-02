@@ -12,6 +12,7 @@
       <NuxtLink to="/buscador-de-localidades">Buscador de localidades 🗺️</NuxtLink>
       <NuxtLink to="/insecure-form">Formulario inseguro 🔫</NuxtLink>
       <NuxtLink to="/panel-maestros">Panel de maestros 📚</NuxtLink>
+      <NuxtLink to="/practica-examen-norma">Practica examen Norma 🧪</NuxtLink>
     </div>
     <div class="absolute right-0 hidden md:block h-screen w-2/3">
       <img class="size-full" src="https://media1.tenor.com/m/xLWp_KWMFCEAAAAC/south-park-eric-cartman.gif"

@@ -18,7 +18,7 @@ const props = defineProps<{ post : Post }>();
     <h1 class="text-2xl">{{post.Title}}</h1>
   </CardHeader>
   <CardContent>
-    <p v-html="post.Content"></p>
+    <p>{{post.Content}}</p>
   </CardContent>
   <CardFooter class="flex gap-2">
     <small class="text-muted-foreground text-sm">🕴️: {{post.User.Username}}</small>
